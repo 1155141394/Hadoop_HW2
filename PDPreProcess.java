@@ -49,9 +49,9 @@ public class PDPreProcess {
                            Context context
         ) throws IOException, InterruptedException {
             MapWritable adjMap = new MapWritable();
-	    PDNodeWritable node = new PDNodeWritable();
-	    BooleanWritable flag = new BooleanWritable(true);
-	    Configuration conf = context.getConfiguration();
+            PDNodeWritable node = new PDNodeWritable();
+            BooleanWritable flag = new BooleanWritable(true);
+            Configuration conf = context.getConfiguration();
             int src = Integer.parseInt(conf.get("src"));
             IntWritable srcIntWri = new IntWritable(src);
             for (MapWritable edgeMap : values) {
@@ -62,15 +62,16 @@ public class PDPreProcess {
                     adjMap.put(keyIntWritable, edgeLen);
                 }
             }
+            Text adjText = new Text(PDNodeWritable.MapWritableToString(adjMap));
             if(key.get() == src)
             {
                 IntWritable distance = new IntWritable(0);
-                node.set(distance, srcIntWri, adjMap, flag);
+                node.set(distance, srcIntWri, adjText, flag);
             }
             else
             {
                 IntWritable distance = new IntWritable(Integer.MAX_VALUE);
-                node.set(distance, srcIntWri, adjMap, flag);
+                node.set(distance, srcIntWri, adjText, flag);
             }
             context.write(key, node);
         }

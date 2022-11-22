@@ -102,7 +102,7 @@ public class PDNodeWritable implements Writable {
         return s;
     }
 
-    public static MapWritable textToMapWriable(Text t){
+    public static MapWritable textToMapWritable(Text t){
         String str = t.toString();
         Map<Integer,Integer> map = getStringToMap(str);
 
