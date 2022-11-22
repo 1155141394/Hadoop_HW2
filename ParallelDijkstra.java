@@ -176,7 +176,6 @@ public class ParallelDijkstra {
 	}
 	int i = 0;
 	int iteration = Integer.parseInt(itr);
-    int iterNum = 0;
 
 	while(i < iteration){
         Configuration conf2 = new Configuration();
@@ -218,11 +217,11 @@ public class ParallelDijkstra {
 
         if(job2.getCounters().findCounter(ParallelReducer.ReachCounter.COUNT).getValue() == 0)
         {
-            iterNum = i;
             break;
         }
 
 	}
+
         Configuration conf3 = new Configuration();
         Job job3 = Job.getInstance(conf3,"ReturnFinalResult");
         job3.setJarByClass(ParallelDijkstra.class);
@@ -235,7 +234,7 @@ public class ParallelDijkstra {
         //设置reduce输出的key和value类型
         job3.setOutputKeyClass(LongWritable.class);
         job3.setOutputValueClass(Text.class);
-        FileInputFormat.addInputPath(job3, new Path("/user/hadoop/tmp/output" + iterNum));
+        FileInputFormat.addInputPath(job3, new Path("/user/hadoop/tmp/output" + i));
         FileOutputFormat.setOutputPath(job3, new Path(args[1]));
         System.exit(job3.waitForCompletion(true) ? 0 : 1);
 
