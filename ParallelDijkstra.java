@@ -49,8 +49,8 @@ public class ParallelDijkstra {
 		            IntWritable prevWritable = new IntWritable();
                     int prev = (int)nidWritable.get();
                     prevWritable.set(prev);
-                    Text t = new Text();
-                    N.set(sum, prevWritable, t, flag);
+                    Text text = new Text();
+                    N.set(sum, prevWritable, text, flag);
 		            IntWritable tmpWritable = (IntWritable)node;
 		            LongWritable nodeWritable = new LongWritable((long)tmpWritable.get());
                     context.write(nodeWritable, N);

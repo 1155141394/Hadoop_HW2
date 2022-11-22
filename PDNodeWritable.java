@@ -32,7 +32,7 @@ public class PDNodeWritable implements Writable {
         this.flag = new BooleanWritable(true);
     }
 
-    public void set (IntWritable distance, IntWritable prev, MapWritable adjList, BooleanWritable flag){
+    public void set (IntWritable distance, IntWritable prev, Text adjList, BooleanWritable flag){
         this.distance = distance;
         this.prev = prev;
         this.adjList = adjList;
@@ -96,7 +96,7 @@ public class PDNodeWritable implements Writable {
         Set<Writable> keys = map.keySet();
         String s = new String();
         for (Writable key : keys) {
-            IntWritable count = (IntWritable) adjList.get(key);
+            IntWritable count = (IntWritable) map.get(key);
             s = s + key.toString() + ":" + count.toString() + "," ;
         }
         return s;
