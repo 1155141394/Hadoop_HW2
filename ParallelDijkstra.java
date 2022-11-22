@@ -242,9 +242,9 @@ public class ParallelDijkstra {
         JobControl jc = new JobControl("Final");
         jc.addJob(cjob3);
 
-        jcThread = new Thread(jc);
+        Thread jcThread = new Thread(jc);
         jcThread.start();
-        
+
         while(true){
                 if(jc.allFinished()){
                         System.out.println(jc.getSuccessfulJobList());
