@@ -104,9 +104,13 @@ public class PDNodeWritable implements Writable {
 
     public static MapWritable textToMapWritable(Text t){
         String str = t.toString();
+        MapWritable mapWritable = new MapWritable();
+        if(str.isEmpty()){
+            return mapWritable;
+        }
         Map<Integer,Integer> map = getStringToMap(str);
 
-        MapWritable mapWritable = new MapWritable();
+
 
         for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
             int key = entry.getKey();
