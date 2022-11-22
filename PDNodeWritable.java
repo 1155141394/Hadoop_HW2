@@ -21,14 +21,14 @@ public class PDNodeWritable implements Writable {
     // Some data
     private IntWritable distance = new IntWritable(Integer.MAX_VALUE);
     private IntWritable prev = new IntWritable(0);
-    private MapWritable adjList = new MapWritable();
+    private Text adjList = new Text();
 
     public BooleanWritable flag = new BooleanWritable(true);
 
     public void PDNodeWritable() throws IOException {
         this.distance = new IntWritable(Integer.MAX_VALUE);
         this.prev = new IntWritable(0);
-        this.adjList = new MapWritable();
+        this.adjList = new Text();
         this.flag = new BooleanWritable(true);
     }
 
@@ -47,7 +47,7 @@ public class PDNodeWritable implements Writable {
         this.prev = prev;
     }
 
-    public void setAdjList(MapWritable adjList){
+    public void setAdjList(Text adjList){
         this.adjList = adjList;
     }
 
@@ -60,7 +60,7 @@ public class PDNodeWritable implements Writable {
         return this.distance;
     }
 
-    public MapWritable getAdjList() {
+    public Text getAdjList() {
         return this.adjList;
     }
 
@@ -92,18 +92,42 @@ public class PDNodeWritable implements Writable {
 	return pd;
     }
 
-    public String toString() {
-        StringBuilder result = new StringBuilder();
-        IntWritable distance = this.distance;
-        IntWritable prev = this.prev;
-        MapWritable adjList = this.adjList;
-        BooleanWritable flag = this.flag;
-        String s = new String(" ");
-        Set<Writable> keys = adjList.keySet();
+    public static String MapWritableToString(MapWritable map){
+        Set<Writable> keys = map.keySet();
+        String s = new String();
         for (Writable key : keys) {
             IntWritable count = (IntWritable) adjList.get(key);
             s = s + key.toString() + ":" + count.toString() + "," ;
         }
+        return s;
+    }
+
+    public static MapWritable textToMapWriable(Text t){
+        String str = t.toString();
+        Map<Integer,Integer> map = getStringToMap(str);
+
+        MapWritable mapWritable = new MapWritable();
+
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            int key = entry.getKey();
+            int value = entry.getValue();
+            IntWritable keyWritable = new IntWritable(key);
+            IntWritable valueWritable = new IntWritable(value);
+            mapWritable.put(keyWritable, valueWritable);
+        }
+        return mapWritable;
+    }
+
+
+
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        IntWritable distance = this.distance;
+        IntWritable prev = this.prev;
+        Text adjList = this.adjList;
+        BooleanWritable flag = this.flag;
+        String s = new String(" ");
+        s = s + adjList.toString();
         s = s + " ";
         result.append( distance.toString() + " " + prev.toString() + " " + flag.toString() + s );
         return result.toString();
@@ -114,14 +138,10 @@ public class PDNodeWritable implements Writable {
         StringBuilder result = new StringBuilder();
         IntWritable distance = this.distance;
         IntWritable prev = this.prev;
-        MapWritable adjList = this.adjList;
+        Text adjList = this.adjList;
         BooleanWritable flag = this.flag;
         String s = new String(" ");
-        Set<Writable> keys = adjList.keySet();
-        for (Writable key : keys) {
-            IntWritable count = (IntWritable) adjList.get(key);
-            s = s + key.toString() + ":" + count.toString() + "," ;
-        }
+        s = s + adjList.toString();
         s = s + " ";
         result.append( nid.toString() + "\t" + distance.toString() + " " + prev.toString() + " " + flag.toString() + s );
         return result.toString();
@@ -129,11 +149,11 @@ public class PDNodeWritable implements Writable {
     }
 
     public void copy(PDNodeWritable pd, LongWritable nid){
-	String pdStr = pd.toString(nid);
-	Text pdText = new Text();
-	pdText.set(pdStr);
-	this.getByText(pdText);
-	return;	
+        String pdStr = pd.toString(nid);
+        Text pdText = new Text();
+        pdText.set(pdStr);
+        this.getByText(pdText);
+        return;
     }
     	    
 
@@ -168,25 +188,16 @@ public class PDNodeWritable implements Writable {
 
 	boolean flag = Boolean.parseBoolean(all[2]);
         BooleanWritable flagWritable = new BooleanWritable(flag);
-    MapWritable mapWritable = new MapWritable();
+        Text text = new Text();
     if(all.length == 4)
     {
-        Map<Integer,Integer> map = getStringToMap(all[3]);
-
-
-        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            int key = entry.getKey();
-            int value = entry.getValue();
-            IntWritable keyWritable = new IntWritable(key);
-            IntWritable valueWritable = new IntWritable(value);
-            mapWritable.put(keyWritable, valueWritable);
-        }
+        text.set(all[4]);
     }
 
 	
 	this.distance = distanceWritable;
 	this.prev = prevWritable;
-	this.adjList = mapWritable;
+	this.adjList = text;
 	this.flag = flagWritable;
         return nid;
    
