@@ -134,93 +134,93 @@ public class ParallelDijkstra {
     }
 
     public static void main(String[] args) throws Exception {
-//	String itr = args[3];
-//        Configuration conf1 = new Configuration();
-//        //获取job对象
-//	conf1.set("src", args[2]);
-//        Job job1 = Job.getInstance(conf1, "PreProcess");
-//        //设置job方法入口的驱动类
-//      	job1.setJarByClass(PDPreProcess.class);
-//        //设置Mapper组件类
-//        job1.setMapperClass(PDPreProcess.PDPreProMapper.class);
-//        //设置mapper的输出key类型
-//        job1.setMapOutputKeyClass(IntWritable.class);
-//        //设置Mappper的输出value类型，注意Text的导包问题
-//        job1.setMapOutputValueClass(MapWritable.class);
-//        //设置reduce组件类
-//        job1.setReducerClass(PDPreProcess.PDPreProReducer.class);
-//        //设置reduce输出的key和value类型
-//        job1.setOutputKeyClass(IntWritable.class);
-//        job1.setOutputValueClass(PDNodeWritable.class);
-//        //设置输入路径
-//        FileInputFormat.setInputPaths(job1, new Path(args[0]));
-//        //设置输出结果路径，要求结果路径事先不能存在
-//        FileOutputFormat.setOutputPath(job1, new Path("/user/hadoop/tmp/output0/"));
-//
-//
-//	ControlledJob cjob1 = new ControlledJob(conf1);
-//
-//	cjob1.setJob(job1);
-//        JobControl jc = new JobControl("PreProcess");
-//        jc.addJob(cjob1);
-//
-//	Thread jcThread = new Thread(jc);
-//        jcThread.start();
-//        while(true){
-//		if(jc.allFinished()){
-//		       System.out.println(jc.getSuccessfulJobList());
-//		       System.out.println(jc.getFailedJobList());
-//		       jc.stop();
-//		       break;
-//		}
-//	}
-//	int i = 0;
-//	int iteration = Integer.parseInt(itr);
-//
-//	while(i < iteration){
-//        Configuration conf2 = new Configuration();
-//        Job job2 = Job.getInstance(conf2,"Parallel");
-//
-//        job2.setJarByClass(ParallelDijkstra.class);
-//
-//        job2.setMapperClass(ParallelMapper.class);
-//        job2.setMapOutputKeyClass(LongWritable.class);
-//        job2.setMapOutputValueClass(PDNodeWritable.class);
-////        job2.setCombinerClass(ParallelReducer.class);
-//        job2.setReducerClass(ParallelReducer.class);
-//        //设置reduce输出的key和value类型
-//        job2.setOutputKeyClass(LongWritable.class);
-//        job2.setOutputValueClass(PDNodeWritable.class);
-//
-//        FileInputFormat.setInputPaths(job2,new Path("/user/hadoop/tmp/output"+ i));
-//		i++;
-//
-//        FileOutputFormat.setOutputPath(job2, new Path("/user/hadoop/tmp/output" + i));
-//
-//
-//        ControlledJob cjob2 = new ControlledJob(conf2);
-//
-//        cjob2.setJob(job2);
-//        jc = new JobControl("Parallel");
-//        jc.addJob(cjob2);
-//
-//        jcThread = new Thread(jc);
-//        jcThread.start();
-//        while(true){
-//                if(jc.allFinished()){
-//                        System.out.println(jc.getSuccessfulJobList());
-//                        System.out.println(jc.getFailedJobList());
-//                        jc.stop();
-//                        break;
-//                }
-//        }
-//
-//        if(job2.getCounters().findCounter(ParallelReducer.ReachCounter.COUNT).getValue() == 0)
-//        {
-//            break;
-//        }
-//
-//	}
+	String itr = args[3];
+        Configuration conf1 = new Configuration();
+        //获取job对象
+	conf1.set("src", args[2]);
+        Job job1 = Job.getInstance(conf1, "PreProcess");
+        //设置job方法入口的驱动类
+      	job1.setJarByClass(PDPreProcess.class);
+        //设置Mapper组件类
+        job1.setMapperClass(PDPreProcess.PDPreProMapper.class);
+        //设置mapper的输出key类型
+        job1.setMapOutputKeyClass(IntWritable.class);
+        //设置Mappper的输出value类型，注意Text的导包问题
+        job1.setMapOutputValueClass(MapWritable.class);
+        //设置reduce组件类
+        job1.setReducerClass(PDPreProcess.PDPreProReducer.class);
+        //设置reduce输出的key和value类型
+        job1.setOutputKeyClass(IntWritable.class);
+        job1.setOutputValueClass(PDNodeWritable.class);
+        //设置输入路径
+        FileInputFormat.setInputPaths(job1, new Path(args[0]));
+        //设置输出结果路径，要求结果路径事先不能存在
+        FileOutputFormat.setOutputPath(job1, new Path("/user/hadoop/tmp/output0/"));
+
+
+	ControlledJob cjob1 = new ControlledJob(conf1);
+
+	cjob1.setJob(job1);
+        JobControl jc = new JobControl("PreProcess");
+        jc.addJob(cjob1);
+
+	Thread jcThread = new Thread(jc);
+        jcThread.start();
+        while(true){
+		if(jc.allFinished()){
+		       System.out.println(jc.getSuccessfulJobList());
+		       System.out.println(jc.getFailedJobList());
+		       jc.stop();
+		       break;
+		}
+	}
+	int i = 0;
+	int iteration = Integer.parseInt(itr);
+
+	while(i < iteration){
+        Configuration conf2 = new Configuration();
+        Job job2 = Job.getInstance(conf2,"Parallel");
+
+        job2.setJarByClass(ParallelDijkstra.class);
+
+        job2.setMapperClass(ParallelMapper.class);
+        job2.setMapOutputKeyClass(LongWritable.class);
+        job2.setMapOutputValueClass(PDNodeWritable.class);
+//        job2.setCombinerClass(ParallelReducer.class);
+        job2.setReducerClass(ParallelReducer.class);
+        //设置reduce输出的key和value类型
+        job2.setOutputKeyClass(LongWritable.class);
+        job2.setOutputValueClass(PDNodeWritable.class);
+
+        FileInputFormat.setInputPaths(job2,new Path("/user/hadoop/tmp/output"+ i));
+		i++;
+
+        FileOutputFormat.setOutputPath(job2, new Path("/user/hadoop/tmp/output" + i));
+
+
+        ControlledJob cjob2 = new ControlledJob(conf2);
+
+        cjob2.setJob(job2);
+        jc = new JobControl("Parallel");
+        jc.addJob(cjob2);
+
+        jcThread = new Thread(jc);
+        jcThread.start();
+        while(true){
+                if(jc.allFinished()){
+                        System.out.println(jc.getSuccessfulJobList());
+                        System.out.println(jc.getFailedJobList());
+                        jc.stop();
+                        break;
+                }
+        }
+
+        if(job2.getCounters().findCounter(ParallelReducer.ReachCounter.COUNT).getValue() == 0)
+        {
+            break;
+        }
+
+	}
 
         Configuration conf3 = new Configuration();
         Job job3 = Job.getInstance(conf3,"ReturnFinalResult");
@@ -234,26 +234,25 @@ public class ParallelDijkstra {
         //设置reduce输出的key和value类型
         job3.setOutputKeyClass(LongWritable.class);
         job3.setOutputValueClass(Text.class);
-        FileInputFormat.addInputPath(job3, new Path("/user/hadoop/tmp/output3") );
+        FileInputFormat.addInputPath(job3, new Path("/user/hadoop/tmp/output" + i));
         FileOutputFormat.setOutputPath(job3, new Path(args[1]));
-        System.exit(job3.waitForCompletion(true) ? 0 : 1);
-//        ControlledJob cjob3 = new ControlledJob(conf3);
-//
-//        cjob3.setJob(job3);
-//        JobControl jc = new JobControl("Final");
-//        jc.addJob(cjob3);
-//
-//        Thread jcThread = new Thread(jc);
-//        jcThread.start();
-//
-//        while(true){
-//                if(jc.allFinished()){
-//                        System.out.println(jc.getSuccessfulJobList());
-//                        System.out.println(jc.getFailedJobList());
-//                        jc.stop();
-//                        break;
-//                }
-//        }
+        ControlledJob cjob3 = new ControlledJob(conf3);
+
+        cjob3.setJob(job3);
+        jc = new JobControl("Final");
+        jc.addJob(cjob3);
+
+        jcThread = new Thread(jc);
+        jcThread.start();
+
+        while(true){
+                if(jc.allFinished()){
+                        System.out.println(jc.getSuccessfulJobList());
+                        System.out.println(jc.getFailedJobList());
+                        jc.stop();
+                        break;
+                }
+        }
 
 
     }
