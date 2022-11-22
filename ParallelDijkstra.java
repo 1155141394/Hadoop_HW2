@@ -234,25 +234,26 @@ public class ParallelDijkstra {
         //设置reduce输出的key和value类型
         job3.setOutputKeyClass(LongWritable.class);
         job3.setOutputValueClass(Text.class);
-        FileInputFormat.addInputPath(job3, new Path("/user/hadoop/tmp/output" + 10));
+        FileInputFormat.addInputPath(job3, new Path("/user/hadoop/tmp/output" + 9));
         FileOutputFormat.setOutputPath(job3, new Path(args[1]));
-        ControlledJob cjob3 = new ControlledJob(conf3);
-
-        cjob3.setJob(job3);
-        JobControl jc = new JobControl("Final");
-        jc.addJob(cjob3);
-
-        Thread jcThread = new Thread(jc);
-        jcThread.start();
-
-        while(true){
-                if(jc.allFinished()){
-                        System.out.println(jc.getSuccessfulJobList());
-                        System.out.println(jc.getFailedJobList());
-                        jc.stop();
-                        break;
-                }
-        }
+        System.exit(job3.waitForCompletion(true) ? 0 : 1);
+//        ControlledJob cjob3 = new ControlledJob(conf3);
+//
+//        cjob3.setJob(job3);
+//        JobControl jc = new JobControl("Final");
+//        jc.addJob(cjob3);
+//
+//        Thread jcThread = new Thread(jc);
+//        jcThread.start();
+//
+//        while(true){
+//                if(jc.allFinished()){
+//                        System.out.println(jc.getSuccessfulJobList());
+//                        System.out.println(jc.getFailedJobList());
+//                        jc.stop();
+//                        break;
+//                }
+//        }
 
 
     }
