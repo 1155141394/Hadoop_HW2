@@ -23,21 +23,22 @@ public class ParallelDijkstra {
 
         public void map(LongWritable key, Text t, Context context
         ) throws IOException, InterruptedException {
-	    PDNodeWritable value = new PDNodeWritable();
+	        PDNodeWritable value = new PDNodeWritable();
     	    long nid = (long)value.getByText(t);	   
-	    LongWritable nidWritable = new LongWritable(nid); 
+	        LongWritable nidWritable = new LongWritable(nid);
             IntWritable d = value.getDistance();
 
 
             context.write(nidWritable, value);
             if(d.get() != Integer.MAX_VALUE){
-                MapWritable adjList = value.getAdjList();
+                Text adjText = value.getAdjList();
+                MapWritable adjList = PDNodeWritable.textToMapWritable(adjText);
 
                 Set<Writable> nodes = adjList.keySet();
                 for (Writable node : nodes) {
                     // d1 上一个点的距离
                     int d1 = d.get();
-		    IntWritable d2Writable = (IntWritable)adjList.get(node);
+		            IntWritable d2Writable = (IntWritable)adjList.get(node);
                     // d2 上一个点到node的距离
                     int d2 = d2Writable.get();
                     // sum node的距离
@@ -45,16 +46,13 @@ public class ParallelDijkstra {
                     sum.set(d1+d2);
                     PDNodeWritable N = new PDNodeWritable();
                     BooleanWritable flag = new BooleanWritable(false);
-		    IntWritable prevWritable = new IntWritable();
+		            IntWritable prevWritable = new IntWritable();
                     int prev = (int)nidWritable.get();
                     prevWritable.set(prev);
-
-
-		    MapWritable map = new MapWritable();
-                    N.set(sum, prevWritable, map, flag);
-		    IntWritable tmpWritable = (IntWritable)node;
-		    int tmp = tmpWritable.get();
-		    LongWritable nodeWritable = new LongWritable((long)tmp);
+                    Text t = new Text();
+                    N.set(sum, prevWritable, t, flag);
+		            IntWritable tmpWritable = (IntWritable)node;
+		            LongWritable nodeWritable = new LongWritable((long)tmpWritable.get());
                     context.write(nodeWritable, N);
 		    
                 }
@@ -157,7 +155,7 @@ public class ParallelDijkstra {
         //设置输入路径
         FileInputFormat.setInputPaths(job1, new Path(args[0]));
         //设置输出结果路径，要求结果路径事先不能存在
-        FileOutputFormat.setOutputPath(job1, new Path("/user/hadoop/tmp/Output0/"));
+        FileOutputFormat.setOutputPath(job1, new Path("/user/hadoop/tmp/output0/"));
 
 
 	ControlledJob cjob1 = new ControlledJob(conf1);
@@ -195,10 +193,10 @@ public class ParallelDijkstra {
         job2.setOutputKeyClass(LongWritable.class);
         job2.setOutputValueClass(PDNodeWritable.class);
 
-        FileInputFormat.setInputPaths(job2,new Path("/user/hadoop/tmp/Output"+ i));
+        FileInputFormat.setInputPaths(job2,new Path("/user/hadoop/tmp/output"+ i));
 		i++;
 
-        FileOutputFormat.setOutputPath(job2, new Path("/user/hadoop/tmp/Output" + i));
+        FileOutputFormat.setOutputPath(job2, new Path("/user/hadoop/tmp/output" + i));
 
 
         ControlledJob cjob2 = new ControlledJob(conf2);
@@ -237,7 +235,7 @@ public class ParallelDijkstra {
         //设置reduce输出的key和value类型
         job3.setOutputKeyClass(LongWritable.class);
         job3.setOutputValueClass(Text.class);
-        FileInputFormat.addInputPath(job3, new Path("/user/hadoop/tmp/Output" + iterNum));
+        FileInputFormat.addInputPath(job3, new Path("/user/hadoop/tmp/output" + iterNum));
         FileOutputFormat.setOutputPath(job3, new Path(args[1]));
         System.exit(job3.waitForCompletion(true) ? 0 : 1);
 
