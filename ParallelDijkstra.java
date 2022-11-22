@@ -234,7 +234,7 @@ public class ParallelDijkstra {
         //设置reduce输出的key和value类型
         job3.setOutputKeyClass(LongWritable.class);
         job3.setOutputValueClass(Text.class);
-        FileInputFormat.addInputPath(job3, new Path("/user/hadoop/tmp/output" + 9));
+        FileInputFormat.addInputPath(job3, new Path("/user/hadoop/tmp/output9:" );
         FileOutputFormat.setOutputPath(job3, new Path(args[1]));
         System.exit(job3.waitForCompletion(true) ? 0 : 1);
 //        ControlledJob cjob3 = new ControlledJob(conf3);
