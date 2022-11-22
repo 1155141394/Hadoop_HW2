@@ -175,30 +175,30 @@ public class PDNodeWritable implements Writable {
 
 
     public int getByText(Text t){
-	PDNodeWritable node = new PDNodeWritable();
-	String str = t.toString();
-	String[] all = str.trim().split(" ");
-	String[] nodeAndDist = all[0].split("\t");
-	int nid = Integer.parseInt(nodeAndDist[0]);
-	int distance = Integer.parseInt(nodeAndDist[1]);
-	IntWritable distanceWritable = new IntWritable(distance);
+        PDNodeWritable node = new PDNodeWritable();
+        String str = t.toString();
+        String[] all = str.trim().split(" ");
+        String[] nodeAndDist = all[0].split("\t");
+        int nid = Integer.parseInt(nodeAndDist[0]);
+        int distance = Integer.parseInt(nodeAndDist[1]);
+        IntWritable distanceWritable = new IntWritable(distance);
 
-	int prev = Integer.parseInt(all[1]);
-        IntWritable prevWritable = new IntWritable(prev);
+        int prev = Integer.parseInt(all[1]);
+            IntWritable prevWritable = new IntWritable(prev);
 
-	boolean flag = Boolean.parseBoolean(all[2]);
-        BooleanWritable flagWritable = new BooleanWritable(flag);
-        Text text = new Text();
-    if(all.length == 4)
-    {
-        text.set(all[4]);
-    }
+        boolean flag = Boolean.parseBoolean(all[2]);
+            BooleanWritable flagWritable = new BooleanWritable(flag);
+            Text text = new Text();
+        if(all.length == 4)
+        {
+            text.set(all[3]);
+        }
 
-	
-	this.distance = distanceWritable;
-	this.prev = prevWritable;
-	this.adjList = text;
-	this.flag = flagWritable;
+
+        this.distance = distanceWritable;
+        this.prev = prevWritable;
+        this.adjList = text;
+        this.flag = flagWritable;
         return nid;
    
     }
