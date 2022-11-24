@@ -73,7 +73,7 @@ public class ParallelDijkstra {
             Counter counter = context.getCounter(ReachCounter.COUNT);
             // Set max distance
             int dMin = Integer.MAX_VALUE;
-            IntWritable preID = new IntWritable();
+            int prevID = 0;
             // Create a new PDNode to store the node info
             PDNodeWritable InfoNode = new PDNodeWritable();
 
